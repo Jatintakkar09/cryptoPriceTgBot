@@ -22,7 +22,8 @@ const chatId=msg.chat.id;
           { text: '💰 Get SOL Price', callback_data: 'get_sol' }         
         ],
         [
-          { text: '🌐 Visit Website', url: 'https://www.youtube.com' }
+           { text: '💰 Get BTC Price', callback_data: 'get_btc' },
+           { text: '💰 Get BSC Price', callback_data: 'get_bsc' }
         ]
       ]
     }
@@ -47,6 +48,17 @@ const price=await currencyPrice("solana");
 bot.sendMessage(chatId,`Sol $${price.solana.usd}`)
 }
 
+
+if(data=="get_btc"){
+const price=await currencyPrice("bitcoin");
+bot.sendMessage(chatId,`Bitcoin $${price.bitcoin.usd}`)
+}
+
+
+if (data === "get_bsc") {
+  const price = await currencyPrice("binancecoin");
+  bot.sendMessage(chatId,`BSC  ${price.binancecoin.usd}`)
+}
 
 
 
