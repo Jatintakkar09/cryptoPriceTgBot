@@ -33,6 +33,34 @@ const chatId=msg.chat.id;
 
 })
 
+// on Set alerts
+
+bot.onText(/\/setAlerts/,(msg)=>{
+ const chatId=msg.chat.id;
+
+ const options={
+  reply_markup:{
+    inline_keyboard:[
+       [
+          { text: 'ETH', callback_data: 'set_eth' },
+          { text: 'SOL', callback_data: 'set_sol' }         
+        ],
+        [
+           { text: 'BTC', callback_data: 'set_btc' },
+           { text: 'BSC', callback_data: 'set_bsc' }
+        ]
+    ]
+  }
+ }
+
+ bot.sendMessage(chatId,"💰 Choose Crypto 💰",options)
+}
+
+)
+
+
+
+
 bot.on("callback_query",async(callbackQuery)=>{
 const msg=callbackQuery.message;
 const chatId=msg.chat.id;
@@ -45,7 +73,7 @@ bot.sendMessage(chatId,`Eth $${price.ethereum.usd}`)
 
 if(data=="get_sol"){
 const price=await currencyPrice("solana");
-bot.sendMessage(chatId,`Sol $${price.solana.usd}`)
+bot.sendMessage(chatId,`Solana $${price.solana.usd}`)
 }
 
 
@@ -57,7 +85,7 @@ bot.sendMessage(chatId,`Bitcoin $${price.bitcoin.usd}`)
 
 if (data === "get_bsc") {
   const price = await currencyPrice("binancecoin");
-  bot.sendMessage(chatId,`BSC  ${price.binancecoin.usd}`)
+  bot.sendMessage(chatId,`BSC  $${price.binancecoin.usd}`)
 }
 
 
