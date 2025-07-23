@@ -1,12 +1,10 @@
-import currencyPrice from "../Utils/currencyPrice.js"
+import currencyPrice from "../Utils/currencyPrice.js";
 
+const Intervals = new Map();
 
-const Intervals=new Map()
-
-function setAlerts(time, currency, bot, chatId) {
+function setAlert(time, currency, bot, chatId) {
   const key = `${chatId}_${currency.toLowerCase()}`;
 
-  // If an alert already exists → clear it
   if (Intervals.has(key)) {
     clearInterval(Intervals.get(key));
     Intervals.delete(key);
@@ -16,7 +14,15 @@ function setAlerts(time, currency, bot, chatId) {
   const intervalId = setInterval(async () => {
     try {
       const price = await currencyPrice(currency);
-      bot.sendMessage(chatId, `📈 ${currency.toUpperCase()} Price: $${price}`);
+      const coinData = price[currency.toLowerCase()];
+      const usdPrice = coinData?.usd;
+
+      if (usdPrice) {
+        bot.sendMessage(chatId, `📈 ${currency.toUpperCase()} Price: $${usdPrice}`);
+      } else {
+        bot.sendMessage(chatId, `⚠️ Could not fetch price for ${currency.toUpperCase()}`);
+      }
+
     } catch (err) {
       bot.sendMessage(chatId, `❌ Failed to fetch price for ${currency.toUpperCase()}`);
     }
@@ -26,8 +32,16 @@ function setAlerts(time, currency, bot, chatId) {
   bot.sendMessage(chatId, `✅ Alert set for ${currency.toUpperCase()} every ${time} minute(s).`);
 }
 
+function deleteAlerts(chatId, currency, bot) {
+  const key = `${chatId}_${currency.toLowerCase()}`;
 
-function deleteIntervals(chatId,currency){
-const key=`${chatId}_${currency.toLowerCase()}`
-
+  if (Intervals.has(key)) {
+    clearInterval(Intervals.get(key));
+    Intervals.delete(key);
+    bot.sendMessage(chatId, `🛑 Alert for ${currency.toUpperCase()} has been stopped.`);
+  } else {
+    bot.sendMessage(chatId, `⚠️ Alert for ${currency.toUpperCase()} does not exist.`);
+  }
 }
+
+export default { Intervals, setAlert, deleteAlerts };
