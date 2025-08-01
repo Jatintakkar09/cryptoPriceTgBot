@@ -11,7 +11,7 @@ bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   bot.sendMessage(
     chatId,
-    `🚀 Track ETH, SOL & BTC live 📈 with alerts 🔔, trends 📊 — use
+    `🚀 Track ETH, SOL & BTC live 📈 with awdfwelerts 🔔, trends 📊 — use
      /prices to begin!
      /setAlerts to set Alerts
      /deleteAlerts for deleting alerts
